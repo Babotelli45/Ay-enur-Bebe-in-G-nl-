@@ -50,8 +50,8 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
 
       {/* Trackerlar */}
       <ReadingTracker
-        value={entry?.reading_count ?? 0}
-        onChange={(v) => onUpdate({ reading_count: v })}
+        value={(entry as any)?.reading_count ?? 0}
+        onChange={(v) => onUpdate({ reading_count: v } as any)}
       />
       <WaterTracker
         value={entry?.water_count ?? 0}
