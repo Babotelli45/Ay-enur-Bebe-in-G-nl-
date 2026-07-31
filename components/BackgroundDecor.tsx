@@ -351,10 +351,8 @@ function SingleCandle({ height, width, glow = true }: { height: string; width: s
   );
 }
 
-function Candle({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
+function Candle({ corner }: { corner: | "bl" | "br" }) {
   const posClass = {
-    tl: "top-4 left-4",
-    tr: "top-4 right-4",
     bl: "bottom-4 left-4",
     br: "bottom-4 right-4",
   }[corner];
