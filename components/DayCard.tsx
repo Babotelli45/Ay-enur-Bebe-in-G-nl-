@@ -49,9 +49,9 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
       </button>
 
       {/* Trackerlar */}
-      <ReadingTracker 
-        value={dayData?.readingHours || 0} 
-        onChange={(v) => handleReadingChange?.(dayIndex, v)} 
+      <ReadingTracker
+        value={entry?.reading_count ?? 0}
+        onChange={(v) => onUpdate({ reading_count: v })}
       />
       <WaterTracker
         value={entry?.water_count ?? 0}
