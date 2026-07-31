@@ -31,10 +31,6 @@ export default function ReadingTracker({ value, onChange }: Props) {
       </div>
 
       {/* Simgelerin Altındaki Minicik Saat Yazıları (Düzeni ve Satır Yüksekliğini Bozmaz) */}
-      <div className="flex justify-between pl-[60px] pr-1 text-[8px] text-ink/40 font-mono -mt-0.5 leading-none pointer-events-none">
-        <span>1 sa</span>
-        <span>5 sa</span>
-      </div>
-    </div>
+
   );
 }
