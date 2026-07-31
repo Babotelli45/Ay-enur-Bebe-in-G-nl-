@@ -9,6 +9,7 @@ import MoodTracker, { MoodId } from "./MoodTracker";
 import PhotoFrame from "./PhotoFrame";
 import ActivityPickerModal from "./ActivityPickerModal";
 import type { DailyEntry } from "@/lib/types";
+import ReadingTracker from "./ReadingTracker";
 
 interface Props {
   date: Date;
@@ -48,6 +49,10 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
       </button>
 
       {/* Trackerlar */}
+      <ReadingTracker 
+        value={dayData?.readingHours || 0} 
+        onChange={(v) => handleReadingChange?.(dayIndex, v)} 
+      />
       <WaterTracker
         value={entry?.water_count ?? 0}
         onChange={(v) => onUpdate({ water_count: v })}
