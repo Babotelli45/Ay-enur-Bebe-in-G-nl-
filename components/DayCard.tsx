@@ -71,27 +71,25 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
       />
 
       {/* Detaylar */}
-      <input
-        value={entry?.location ?? ""}
-        onChange={(e) => onUpdate({ location: e.target.value } as any)}
-        placeholder="Yer: ..."
-        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
-      />
-      <input
-        value={entry?.comment ?? ""}
-        onChange={(e) => onUpdate({ comment: e.target.value } as any)}
-        placeholder="Yorum / Değerlendirme..."
-        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
-      />
-      <textarea
-        value={entry?.notes ?? ""}
-        onChange={(e) => onUpdate({ notes: e.target.value } as any)}
-        placeholder="Serbest not..."
-        rows={2}
-        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
-/>ink placeholder:text-ink/30 outline-none resize-none py-0.5"
-      />
-
+<input
+  value={entry?.location ?? ""}
+  onChange={(e) => onUpdate({ location: e.target.value } as any)}
+  placeholder="Yer: ..."
+  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
+/>
+<input
+  value={entry?.comment ?? ""}
+  onChange={(e) => onUpdate({ comment: e.target.value } as any)}
+  placeholder="Yorum / Değerlendirme..."
+  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
+/>
+<textarea
+  value={entry?.notes ?? ""}
+  onChange={(e) => onUpdate({ notes: e.target.value } as any)}
+  placeholder="Serbest not..."
+  rows={2}
+  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
+/>
       {/* Fotoğraflar */}
       <div className="grid grid-cols-2 gap-2 mt-1">
         <PhotoFrame
