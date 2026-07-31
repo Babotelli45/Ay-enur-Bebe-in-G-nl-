@@ -396,8 +396,6 @@ export default function BackgroundDecor({ season, holiday }: Props) {
       {DOODLES.map((spot, i) => (
         <Doodle key={i} spot={spot} />
       ))}
-      <Candle corner="tl" />
-      <Candle corner="tr" />
       <Candle corner="bl" />
       <Candle corner="br" />
     </div>
