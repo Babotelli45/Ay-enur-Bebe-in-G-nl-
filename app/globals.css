@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(circle at 20% 10%, #f9dce8 0%, #f0c9d8 35%, #dba9c3 100%);
+  overflow-x: hidden;
+}
+
+/* Aged, dotted bullet-journal paper texture */
+.paper-texture {
+  background-color: #f6eeda;
+  background-image:
+    radial-gradient(rgba(91, 70, 54, 0.16) 1px, transparent 1px),
+    radial-gradient(rgba(205, 163, 91, 0.08) 60px, transparent 61px);
+  background-size: 22px 22px, 220px 220px;
+  background-position: 0 0, 40px 60px;
+  position: relative;
+}
+
+.paper-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.5), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(160, 120, 80, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+/* deckled / torn paper edge illusion */
+.torn-edge {
+  clip-path: polygon(
+    0% 1%, 2% 0%, 6% 1%, 11% 0%, 15% 1%, 20% 0%, 26% 1%, 31% 0%, 37% 1%, 42% 0%,
+    48% 1%, 53% 0%, 59% 1%, 64% 0%, 70% 1%, 75% 0%, 81% 1%, 86% 0%, 92% 1%, 97% 0%, 100% 1%,
+    100% 99%, 97% 100%, 92% 99%, 86% 100%, 81% 99%, 75% 100%, 70% 99%, 64% 100%, 59% 99%,
+    53% 100%, 48% 99%, 42% 100%, 37% 99%, 31% 100%, 26% 99%, 20% 100%, 15% 99%, 11% 100%,
+    6% 99%, 2% 100%, 0% 99%
+  );
+}
+
+.ink-border {
+  border: 2px solid rgba(91, 70, 54, 0.35);
+  border-radius: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(91, 70, 54, 0.3);
+  border-radius: 8px;
+}
+
+/* seasonal falling particles container */
+.season-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
