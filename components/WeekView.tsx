@@ -14,6 +14,7 @@ import {
   APP_END_DATE,
 } from "@/lib/dateUtils";
 import { quoteForDate } from "@/lib/quotes";
+import { getActiveHolidayTheme, getNationalDaysInWeek } from "@/lib/holidays";
 import type { DailyEntry, WeeklyNote } from "@/lib/types";
 import CrayonFilterDefs from "./CrayonFilterDefs";
 import BackgroundDecor from "./BackgroundDecor";
@@ -57,6 +58,11 @@ export default function WeekView() {
   const weekStartIso = toISODate(monday);
   const weekEndIso = toISODate(weekDates[6]);
   const season = useMemo(() => getSeason(weekDates[3]), [weekDates]);
+  const holiday = useMemo(
+    () => getActiveHolidayTheme(weekDates[0], weekDates[6]),
+    [weekDates]
+  );
+  const nationalDays = useMemo(() => getNationalDaysInWeek(weekDates), [weekDates]);
   const quote = useMemo(() => quoteForDate(monday), [monday]);
 
   const fetchWeek = useCallback(async () => {
@@ -155,8 +161,8 @@ export default function WeekView() {
   return (
     <main className="min-h-screen w-full flex items-center justify-center py-8 px-3 sm:px-6 relative">
       <CrayonFilterDefs />
-      <div className="relative w-full max-w-6xl">
-        <BackgroundDecor season={season} />
+      <BackgroundDecor season={season} holiday={holiday} />
+      <div className="relative z-10 w-full max-w-6xl">
         <DateNav
           weekLabel={formatWeekRangeLabel(monday)}
           onPrev={goPrev}
@@ -170,6 +176,26 @@ export default function WeekView() {
           <p className="absolute -top-1 left-2 sm:left-6 font-hand text-lg text-ink/40 select-none">
             Ayşenur Bebeğin günlüğü
           </p>
+
+          {(holiday || nationalDays.length > 0) && (
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start md:pl-4 mb-2">
+              {holiday && (
+                <span className="text-xs font-label bg-white/70 text-ink/70 rounded-full px-3 py-1">
+                  {holiday.kind === "newyear" && "🎄"}
+                  {holiday.kind === "valentine" && "💗"}
+                  {holiday.kind === "religious" && "🌙"} {holiday.label}
+                </span>
+              )}
+              {nationalDays.map(({ date, day }) => (
+                <span
+                  key={toISODate(date)}
+                  className="text-xs font-label bg-white/70 text-ink/70 rounded-full px-3 py-1"
+                >
+                  {day.icon} {day.label}
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-2 relative">
             {/* cilt gölgesi */}

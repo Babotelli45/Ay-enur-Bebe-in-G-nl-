@@ -1,47 +1,310 @@
 "use client";
 
 import type { Season } from "@/lib/dateUtils";
+import type { HolidayTheme } from "@/lib/holidays";
 
-const DOODLES: { emoji: string; top: string; left: string; size: string; rotate: string }[] = [
-  { emoji: "💍", top: "4%", left: "8%", size: "text-xl", rotate: "-rotate-12" },
-  { emoji: "🐚", top: "92%", left: "6%", size: "text-lg", rotate: "rotate-6" },
-  { emoji: "🎀", top: "8%", left: "92%", size: "text-xl", rotate: "rotate-12" },
-  { emoji: "🐰", top: "50%", left: "2%", size: "text-lg", rotate: "-rotate-6" },
-  { emoji: "🦦", top: "60%", left: "96%", size: "text-lg", rotate: "rotate-3" },
-  { emoji: "🦋", top: "22%", left: "3%", size: "text-base", rotate: "rotate-12" },
-  { emoji: "🌸", top: "78%", left: "94%", size: "text-lg", rotate: "-rotate-6" },
-  { emoji: "🐶", top: "88%", left: "88%", size: "text-lg", rotate: "rotate-6" },
+/* ---------- küçük el çizimi ikon bileşenleri (emoji karşılığı olmayanlar) ---------- */
+
+function DachshundDoodle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 32" className={className} aria-hidden>
+      <g fill="currentColor">
+        <ellipse cx="30" cy="18" rx="22" ry="7.5" />
+        <circle cx="54" cy="14" r="6.5" />
+        <ellipse cx="59" cy="8" rx="2.6" ry="4.5" transform="rotate(25 59 8)" />
+        <rect x="10" y="23" width="3.5" height="7" rx="1.7" />
+        <rect x="20" y="23" width="3.5" height="7" rx="1.7" />
+        <rect x="38" y="23" width="3.5" height="7" rx="1.7" />
+        <rect x="48" y="23" width="3.5" height="7" rx="1.7" />
+        <path
+          d="M8 17 Q0 15 2 9"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          fill="none"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+function NecklaceDoodle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 40 40" className={className} aria-hidden>
+      <path
+        d="M6 6 Q20 26 34 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <circle cx="20" cy="27" r="3.6" fill="currentColor" />
+    </svg>
+  );
+}
+
+/* ---------- serpiştirilmiş süs figürleri ---------- */
+
+type DoodleKind = "emoji" | "dachshund" | "necklace" | "letter";
+
+interface DoodleSpot {
+  kind: DoodleKind;
+  emoji?: string;
+  top: string;
+  left: string;
+  size: string;
+  rotate: string;
+  color?: string;
+}
+
+const DOODLES: DoodleSpot[] = [
+  { kind: "emoji", emoji: "💍", top: "3%", left: "4%", size: "text-xl", rotate: "-rotate-12" },
+  { kind: "necklace", top: "14%", left: "1.5%", size: "w-7 h-7", rotate: "rotate-6", color: "text-gold" },
+  { kind: "emoji", emoji: "💎", top: "34%", left: "2%", size: "text-lg", rotate: "rotate-6" },
+  { kind: "emoji", emoji: "🐚", top: "92%", left: "5%", size: "text-lg", rotate: "rotate-6" },
+  { kind: "emoji", emoji: "🕯️", top: "63%", left: "1%", size: "text-lg", rotate: "-rotate-3" },
+  { kind: "emoji", emoji: "🌸", top: "8%", left: "16%", size: "text-lg", rotate: "-rotate-6" },
+  { kind: "emoji", emoji: "🦋", top: "90%", left: "20%", size: "text-base", rotate: "rotate-12" },
+
+  { kind: "emoji", emoji: "🎀", top: "4%", left: "94%", size: "text-xl", rotate: "rotate-12" },
+  { kind: "emoji", emoji: "🐰", top: "18%", left: "97%", size: "text-lg", rotate: "-rotate-6" },
+  { kind: "emoji", emoji: "🦦", top: "44%", left: "96%", size: "text-lg", rotate: "rotate-3" },
+  { kind: "emoji", emoji: "🦋", top: "68%", left: "95%", size: "text-base", rotate: "-rotate-12" },
+  { kind: "emoji", emoji: "🌸", top: "86%", left: "92%", size: "text-lg", rotate: "-rotate-6" },
+  { kind: "emoji", emoji: "💎", top: "58%", left: "98%", size: "text-base", rotate: "rotate-6" },
+
+  { kind: "dachshund", top: "96%", left: "32%", size: "w-12 h-6", rotate: "rotate-0", color: "text-[#C9975A]" },
+  { kind: "dachshund", top: "2.5%", left: "62%", size: "w-10 h-5", rotate: "rotate-180", color: "text-[#C9975A]/80" },
+
+  { kind: "letter", emoji: "𝒜", top: "1%", left: "46%", size: "text-2xl", rotate: "-rotate-6" },
+  { kind: "letter", emoji: "𝒜", top: "97%", left: "56%", size: "text-2xl", rotate: "rotate-6" },
 ];
 
-function SeasonLayer({ season }: { season: Season }) {
-  const particles = Array.from({ length: 14 });
-  const glyph =
-    season === "winter"
-      ? "❄"
-      : season === "autumn"
-      ? "🍂"
-      : season === "spring"
-      ? "🌸"
-      : "☀";
+function Doodle({ spot, opacity = "opacity-25" }: { spot: DoodleSpot; opacity?: string }) {
+  const commonClass = `absolute select-none ${opacity} ${spot.size} ${spot.rotate} ${spot.color ?? ""}`;
+  const style = { top: spot.top, left: spot.left };
 
+  if (spot.kind === "dachshund") {
+    return (
+      <span className={commonClass} style={style}>
+        <DachshundDoodle className="w-full h-full" />
+      </span>
+    );
+  }
+  if (spot.kind === "necklace") {
+    return (
+      <span className={commonClass} style={style}>
+        <NecklaceDoodle className="w-full h-full" />
+      </span>
+    );
+  }
+  if (spot.kind === "letter") {
+    return (
+      <span className={`${commonClass} font-hand text-blush-deep`} style={style}>
+        {spot.emoji}
+      </span>
+    );
+  }
   return (
-    <div className="season-layer">
+    <span className={commonClass} style={style}>
+      {spot.emoji}
+    </span>
+  );
+}
+
+/* ---------- mevsimsel efektler ---------- */
+
+function FallingLayer({
+  glyphs,
+  count,
+  opacity = "opacity-30",
+}: {
+  glyphs: string[];
+  count: number;
+  opacity?: string;
+}) {
+  const particles = Array.from({ length: count });
+  return (
+    <>
       {particles.map((_, i) => (
         <span
-          key={i}
-          className="absolute text-sm opacity-30 animate-fall"
+          key={`fall-${i}`}
+          className={`absolute text-sm ${opacity} animate-fall`}
           style={{
-            left: `${(i * 7.3) % 100}%`,
-            animationDuration: `${10 + (i % 6)}s`,
-            animationDelay: `${i * 0.6}s`,
+            left: `${(i * 6.7) % 100}%`,
+            animationDuration: `${9 + (i % 7)}s`,
+            animationDelay: `${i * 0.55}s`,
           }}
         >
-          {glyph}
+          {glyphs[i % glyphs.length]}
         </span>
       ))}
+    </>
+  );
+}
+
+function SparkleLayer({
+  glyphs,
+  count,
+  color,
+}: {
+  glyphs: string[];
+  count: number;
+  color?: string;
+}) {
+  const particles = Array.from({ length: count });
+  return (
+    <>
+      {particles.map((_, i) => (
+        <span
+          key={`sparkle-${i}`}
+          className={`absolute text-xs opacity-40 animate-sparkle ${color ?? ""}`}
+          style={{
+            top: `${(i * 13) % 90 + 3}%`,
+            left: `${(i * 23) % 96 + 2}%`,
+            animationDelay: `${i * 0.4}s`,
+          }}
+        >
+          {glyphs[i % glyphs.length]}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function FloatingLayer({
+  glyphs,
+  count,
+}: {
+  glyphs: string[];
+  count: number;
+}) {
+  const particles = Array.from({ length: count });
+  return (
+    <>
+      {particles.map((_, i) => (
+        <span
+          key={`float-${i}`}
+          className="absolute text-base opacity-25 animate-float"
+          style={{
+            left: `${(i * 8.9) % 100}%`,
+            animationDuration: `${11 + (i % 6)}s`,
+            animationDelay: `${i * 0.7}s`,
+          }}
+        >
+          {glyphs[i % glyphs.length]}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function SeasonLayer({ season }: { season: Season }) {
+  if (season === "summer") {
+    return (
+      <div className="season-layer">
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/25 via-transparent to-transparent" />
+        <SparkleLayer glyphs={["✦", "☀️", "✨"]} count={12} color="text-amber-400" />
+      </div>
+    );
+  }
+  if (season === "autumn") {
+    return (
+      <div className="season-layer">
+        <FallingLayer glyphs={["🍂", "🍁"]} count={14} />
+      </div>
+    );
+  }
+  if (season === "winter") {
+    return (
+      <div className="season-layer">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-100/20 via-transparent to-transparent" />
+        <FallingLayer glyphs={["❄️"]} count={16} opacity="opacity-40" />
+      </div>
+    );
+  }
+  // spring
+  return (
+    <div className="season-layer">
+      <FallingLayer glyphs={["🌸", "🌷"]} count={10} />
+      <SparkleLayer glyphs={["🍃", "✨"]} count={8} color="text-emerald-500" />
     </div>
   );
 }
+
+/* ---------- özel gün / bayram temaları ---------- */
+
+function ChristmasTree() {
+  return (
+    <svg
+      viewBox="0 0 100 140"
+      className="absolute bottom-0 left-2 sm:left-8 w-16 sm:w-24 opacity-20 pointer-events-none"
+      aria-hidden
+    >
+      <g fill="#6E9B6E">
+        <polygon points="50,5 20,45 80,45" />
+        <polygon points="50,30 15,72 85,72" />
+        <polygon points="50,55 10,110 90,110" />
+      </g>
+      <rect x="43" y="110" width="14" height="16" fill="#8B5E34" />
+      <circle cx="50" cy="10" r="4" fill="#F0C63A" className="animate-sparkle" />
+      <circle cx="35" cy="55" r="2.5" fill="#E8735C" />
+      <circle cx="65" cy="60" r="2.5" fill="#7EC8E3" />
+      <circle cx="30" cy="90" r="2.5" fill="#F0C63A" />
+      <circle cx="70" cy="95" r="2.5" fill="#E39FBB" />
+    </svg>
+  );
+}
+
+function GiftBoxes() {
+  const gifts = [
+    { top: "8%", left: "9%", color: "#E39FBB" },
+    { top: "94%", left: "90%", color: "#7EC8E3" },
+    { top: "50%", left: "3%", color: "#F0C63A" },
+  ];
+  return (
+    <>
+      {gifts.map((g, i) => (
+        <span
+          key={i}
+          className="absolute text-2xl opacity-25"
+          style={{ top: g.top, left: g.left }}
+        >
+          🎁
+        </span>
+      ))}
+    </>
+  );
+}
+
+function HolidayOverlay({ holiday }: { holiday: HolidayTheme }) {
+  if (holiday.kind === "newyear") {
+    return (
+      <div className="season-layer">
+        <ChristmasTree />
+        <GiftBoxes />
+        <SparkleLayer glyphs={["✨", "❄️", "⭐"]} count={10} color="text-amber-300" />
+      </div>
+    );
+  }
+  if (holiday.kind === "valentine") {
+    return (
+      <div className="season-layer">
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-200/20 via-transparent to-transparent" />
+        <FloatingLayer glyphs={["💗", "💕", "💖"]} count={12} />
+      </div>
+    );
+  }
+  // dini bayram (Ramazan / Kurban Bayramı)
+  return (
+    <div className="season-layer">
+      <div className="absolute inset-0 bg-gradient-to-b from-amber-50/25 via-transparent to-transparent" />
+      <SparkleLayer glyphs={["🌙", "⭐", "✨"]} count={9} color="text-gold" />
+    </div>
+  );
+}
+
+/* ---------- şato ve mumlar ---------- */
 
 function CastleWatermark() {
   return (
@@ -67,33 +330,40 @@ function CastleWatermark() {
   );
 }
 
-function Candle({ side }: { side: "left" | "right" }) {
+function Candle({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
+  const posClass = {
+    tl: "top-4 left-4",
+    tr: "top-4 right-4",
+    bl: "bottom-4 left-4",
+    br: "bottom-4 right-4",
+  }[corner];
+
   return (
-    <div
-      className={`absolute bottom-4 ${side === "left" ? "left-4" : "right-4"} flex flex-col items-center opacity-70`}
-    >
+    <div className={`absolute ${posClass} flex flex-col items-center opacity-70`}>
       <span className="w-1.5 h-3 rounded-full bg-gradient-to-t from-orange-400 to-yellow-200 animate-flicker" />
       <span className="w-2 h-8 bg-[#fdf6e3] rounded-sm border border-ink/10" />
     </div>
   );
 }
 
-export default function BackgroundDecor({ season }: { season: Season }) {
+interface Props {
+  season: Season;
+  holiday: HolidayTheme | null;
+}
+
+export default function BackgroundDecor({ season, holiday }: Props) {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <CastleWatermark />
       <SeasonLayer season={season} />
-      {DOODLES.map((d, i) => (
-        <span
-          key={i}
-          className={`absolute select-none opacity-25 ${d.size} ${d.rotate}`}
-          style={{ top: d.top, left: d.left }}
-        >
-          {d.emoji}
-        </span>
+      {holiday && <HolidayOverlay holiday={holiday} />}
+      {DOODLES.map((spot, i) => (
+        <Doodle key={i} spot={spot} />
       ))}
-      <Candle side="left" />
-      <Candle side="right" />
+      <Candle corner="tl" />
+      <Candle corner="tr" />
+      <Candle corner="bl" />
+      <Candle corner="br" />
     </div>
   );
 }
