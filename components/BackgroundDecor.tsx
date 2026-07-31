@@ -330,6 +330,27 @@ function CastleWatermark() {
   );
 }
 
+function SingleCandle({ height, width, glow = true }: { height: string; width: string; glow?: boolean }) {
+  return (
+    <div className={`relative flex flex-col items-center drop-shadow-md ${width}`}>
+      {/* Alev ve Sıcak Işık Halesi */}
+      <div className="relative flex items-center justify-center">
+        {glow && <div className="absolute w-8 h-8 rounded-full bg-amber-400/30 blur-md animate-pulse" />}
+        <span className="w-3 h-5 rounded-full bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-100 animate-flicker" />
+      </div>
+
+      {/* Fitil */}
+      <span className="w-0.5 h-1.5 bg-neutral-800 -mt-0.5 z-10" />
+
+      {/* Mum Gövdesi */}
+      <div className={`w-full ${height} bg-gradient-to-b from-[#fffcf7] via-[#fdf5e6] to-[#f3e7d4] rounded-t-lg rounded-b-md border border-amber-900/10 shadow-md relative overflow-hidden`}>
+        {/* Üst Erimiş Detay */}
+        <div className="absolute top-0 inset-x-0 h-2 bg-amber-100/60 rounded-full blur-[1px]" />
+      </div>
+    </div>
+  );
+}
+
 function Candle({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
   const posClass = {
     tl: "top-4 left-4",
@@ -339,9 +360,26 @@ function Candle({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
   }[corner];
 
   return (
-    <div className={`absolute ${posClass} flex flex-col items-center opacity-70`}>
-      <span className="w-1.5 h-3 rounded-full bg-gradient-to-t from-orange-400 to-yellow-200 animate-flicker" />
-      <span className="w-2 h-8 bg-[#fdf6e3] rounded-sm border border-ink/10" />
+    <div className={`absolute ${posClass} flex items-end -space-x-3 opacity-90 pointer-events-none z-10 scale-90 sm:scale-100`}>
+      {/* 1. Sol Mum (Orta Boy Sütun) */}
+      <div className="z-10">
+        <SingleCandle height="h-20" width="w-8" />
+      </div>
+
+      {/* 2. Arka Mum (En Uzun Büyük Oda Mumu) */}
+      <div className="z-0">
+        <SingleCandle height="h-32" width="w-11" />
+      </div>
+
+      {/* 3. Ön Mum (Kısa & Tombul Mum) */}
+      <div className="z-20 -mb-1">
+        <SingleCandle height="h-14" width="w-10" />
+      </div>
+
+      {/* 4. En Sağdaki Küçük Gece Mumu */}
+      <div className="z-30 -mb-2">
+        <SingleCandle height="h-9" width="w-7" />
+      </div>
     </div>
   );
 }
