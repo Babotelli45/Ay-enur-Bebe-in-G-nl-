@@ -30,7 +30,6 @@ export default function ReadingTracker({ value, onChange }: Props) {
         </div>
       </div>
 
-      {/* Simgelerin Altındaki Minicik Saat Yazıları (Düzeni ve Satır Yüksekliğini Bozmaz) */}
 
   );
 }
