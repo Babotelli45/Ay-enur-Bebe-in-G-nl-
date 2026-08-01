@@ -49,10 +49,10 @@ export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
   },
   {
     id: "pembe",
-    label: "Pembe Özel Tuş",
+    label: "",
     emoji: "✨",
     bg: "from-pink-200 to-fuchsia-200",
-    options: ["Rastgele Seçim", "YES KİNG (( farkmaz ))"],
+    options: ["Rastgele Seçim", "farkmaz"],
     allowCustom: false,
   },
 ];
@@ -62,12 +62,12 @@ export function weightedRandomActivity(): { main: string; sub: string } {
   const pool: { main: string; sub: string; weight: number }[] = [
     { main: "Kahve", sub: "Casual", weight: 3 },
     { main: "Kahve", sub: "Kokteyl", weight: 2 },
-    { main: "Yürüyüş", sub: "Deniz kenarı", weight: 3 },
-    { main: "Yürüyüş", sub: "Park", weight: 2 },
-    { main: "Yürüyüş", sub: "Orman", weight: 2 },
+    { main: "Yürüyüş", sub: "Deniz kenarı", weight: 2 },
+    { main: "Yürüyüş", sub: "Park", weight: 3 },
+    { main: "Yürüyüş", sub: "Orman", weight: 3 },
     { main: "Yemek", sub: "Sushi", weight: 1 },
     { main: "Yemek", sub: "Tatlı", weight: 1 },
-    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 1 },
+    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 2 },
   ];
   const total = pool.reduce((s, p) => s + p.weight, 0);
   let r = Math.random() * total;
