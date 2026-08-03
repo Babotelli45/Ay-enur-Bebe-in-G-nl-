@@ -10,9 +10,11 @@ export interface ActivityCategory {
   id: ActivityCategoryId;
   label: string;
   emoji: string;
-  bg: string; // tailwind gradient classes for the "buğulu" backdrop
+  icon?: string; // 👈 İŞTE BU SATIRI EKLİYORSUN
+  bg: string;
   options: string[];
   allowCustom: boolean;
+}
 }
 
 export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
