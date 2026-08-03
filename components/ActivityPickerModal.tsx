@@ -14,6 +14,28 @@ interface Props {
 
 type Step = 1 | 2 | 3;
 
+function CategoryIcon({
+  cat,
+  className = "w-10 h-10",
+}: {
+  cat: ActivityCategory;
+  className?: string;
+}) {
+  const [broken, setBroken] = useState(false);
+  if (cat.icon && !broken) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={cat.icon}
+        alt=""
+        onError={() => setBroken(true)}
+        className={`${className} object-contain`}
+      />
+    );
+  }
+  return <span className="text-2xl">{cat.emoji}</span>;
+}
+
 export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
   const [step, setStep] = useState<Step>(1);
   const [category, setCategory] = useState<ActivityCategory | null>(null);
@@ -69,21 +91,18 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
             <h3 className="font-hand text-2xl text-ink mb-4 text-center">
               Bugün ne yapsak? 🌸
             </h3>
+            {/* Simetrik 2x3 grid — 6 kategori de eşit boyutlu */}
             <div className="grid grid-cols-2 gap-3">
               {ACTIVITY_CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => pickCategory(cat)}
-                  className={`bg-gradient-to-br ${cat.bg} rounded-xl p-4 flex flex-col items-center gap-1 border border-ink/10 hover:scale-105 transition-transform ${
-                    cat.id === "pembe" ? "col-span-2 animate-sparkle" : ""
-                  }`}
+                  className={`aspect-square bg-gradient-to-br ${cat.bg} rounded-xl p-3 flex flex-col items-center justify-center gap-1 border border-ink/10 hover:scale-105 transition-transform`}
                 >
-                  {cat.icon ? (
-  <img src={cat.icon} alt={cat.label} className="w-10 h-10 object-contain" />
-) : (
-  <span className="text-2xl">{cat.emoji}</span>
-)}
-                  <span className="font-label text-sm text-ink">{cat.label}</span>
+                  <CategoryIcon cat={cat} className="w-10 h-10" />
+                  <span className="font-label text-sm text-ink text-center leading-tight">
+                    {cat.label}
+                  </span>
                 </button>
               ))}
             </div>
@@ -98,17 +117,25 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
             >
               ← geri
             </button>
-            <h3 className="font-hand text-2xl text-ink mb-4 text-center">
-              {category.emoji} {category.label}
+            <h3 className="font-hand text-2xl text-ink mb-4 text-center flex items-center justify-center gap-2">
+              <CategoryIcon cat={category} className="w-7 h-7" />
+              {category.label}
             </h3>
             <div className="flex flex-col gap-2">
               {category.options.map((opt) => (
                 <button
                   key={opt}
                   onClick={() => pickSub(opt)}
-                  className="bg-white/70 hover:bg-white rounded-lg py-2 px-3 text-left font-label text-ink border border-ink/10"
+                  className="bg-white/70 hover:bg-white rounded-lg py-2 px-3 text-left font-label text-ink border border-ink/10 flex items-center gap-2"
                 >
-                  {opt}
+                  {opt === "Rastgele Seçim" ? (
+                    <>
+                      <span className="text-xl">🎲</span>
+                      <span className="text-ink/60 text-xs">rastgele seçilsin</span>
+                    </>
+                  ) : (
+                    opt
+                  )}
                 </button>
               ))}
               {category.allowCustom && (
@@ -123,6 +150,8 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                       }
                     }}
                     placeholder="kendi yazın..."
+                    inputMode="text"
+                    enterKeyHint="done"
                     className="flex-1 rounded-lg px-3 py-2 bg-white/70 border border-ink/10 font-label text-sm outline-none"
                   />
                   <button
