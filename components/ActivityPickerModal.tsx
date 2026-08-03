@@ -74,9 +74,9 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                 <button
                   key={cat.id}
                   onClick={() => pickCategory(cat)}
-                  className={`bg-gradient-to-br ${cat.bg} rounded-xl p-4 flex flex-col items-center gap-1 border border-ink/10 hover:scale-105 transition-transform ${
-                    cat.id === "pembe" ? "col-span-2 animate-sparkle" : ""
-                  }`}
+              className={`bg-gradient-to-br ${cat.bg} rounded-xl p-4 flex flex-col items-center gap-1 border border-ink/10 hover:scale-105 transition-transform ${
+  cat.id === "pembe" ? "animate-sparkle" : ""
+}`}
                 >
                   <span className="text-2xl">{cat.emoji}</span>
                   <span className="font-label text-sm text-ink">{cat.label}</span>
