@@ -10,19 +10,18 @@ export interface ActivityCategory {
   id: ActivityCategoryId;
   label: string;
   emoji: string;
-  icon?: string; // 👈 İŞTE BU SATIRI EKLİYORSUN
-  bg: string;
+  icon?: string; // özel PNG görseli varsa bu kullanılır, yoksa emoji'ye düşer
+  bg: string; // tailwind gradient classes for the "buğulu" backdrop
   options: string[];
   allowCustom: boolean;
 }
 
-
 export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
   {
-id: "yuruyus",
+    id: "yuruyus",
     label: "Yürüyüş",
     emoji: "🌳",
-    icon: "/icons/yürüyüş.png", 
+    icon: "/icons/yuruyus.png",
     bg: "from-emerald-100 to-emerald-200",
     options: ["Deniz kenarı", "Orman", "Park"],
     allowCustom: true,
@@ -31,7 +30,7 @@ id: "yuruyus",
     id: "yemek",
     label: "Yemek",
     emoji: "🍴",
-      icon: "/icons/yemek.png", 
+    icon: "/icons/yemek.png",
     bg: "from-orange-100 to-rose-100",
     options: ["Fastfood", "Diyet", "Sushi", "Tatlı"],
     allowCustom: true,
@@ -40,7 +39,7 @@ id: "yuruyus",
     id: "kahve",
     label: "Kahve",
     emoji: "☕",
-      icon: "/icons/kahve.png", 
+    icon: "/icons/kahve.png",
     bg: "from-amber-100 to-amber-200",
     options: ["Casual", "Kokteyl"],
     allowCustom: true,
@@ -49,7 +48,7 @@ id: "yuruyus",
     id: "etkinlik",
     label: "Etkinlik",
     emoji: "🎬",
-      icon: "/icons/etkinlik.png", 
+    icon: "/icons/etkinlik.png",
     bg: "from-violet-100 to-indigo-100",
     options: ["Sinema / Tiyatro", "Arcade", "Bowling", "Tatil"],
     allowCustom: true,
@@ -58,18 +57,18 @@ id: "yuruyus",
     id: "ev",
     label: "Ev",
     emoji: "🏠",
-      icon: "/icons/ev.png", 
+    icon: "/icons/ev.png",
     bg: "from-rose-100 to-orange-100",
     options: ["Yatış", "Dizi/Film", "Kitap okuma"],
     allowCustom: true,
   },
   {
     id: "pembe",
-    label: "",
+    label: "Pembe Özel Tuş",
     emoji: "✨",
-      icon: "/icons/pembe.png", 
+    icon: "/icons/pembe.png",
     bg: "from-pink-200 to-fuchsia-200",
-    options: ["🎲", "farkmaz"],
+    options: ["Rastgele Seçim", "YES KİNG (( farkmaz ))"],
     allowCustom: false,
   },
 ];
@@ -81,10 +80,10 @@ export function weightedRandomActivity(): { main: string; sub: string } {
     { main: "Kahve", sub: "Kokteyl", weight: 2 },
     { main: "Yürüyüş", sub: "Deniz kenarı", weight: 3 },
     { main: "Yürüyüş", sub: "Park", weight: 2 },
-    { main: "Yürüyüş", sub: "Orman", weight: 2 },
-    { main: "Yemek", sub: "Sushi", weight: 1 },
-    { main: "Yemek", sub: "Tatlı", weight: 1 },
-    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 1 },
+    { main: "Yürüyüş", sub: "Orman", weight: 3 },
+    { main: "Yemek", sub: "Sushi", weight: 2 },
+    { main: "Yemek", sub: "Tatlı", weight: 2 },
+    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 2 },
   ];
   const total = pool.reduce((s, p) => s + p.weight, 0);
   let r = Math.random() * total;
