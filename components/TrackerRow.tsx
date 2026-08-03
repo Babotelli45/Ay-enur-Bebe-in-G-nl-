@@ -21,14 +21,25 @@ export default function TrackerRow({
 }: Props) {
   const [broken, setBroken] = useState(false);
 
+  // Görselin veya ikon isminin yıldız (Alım) olup olmadığını kontrol ediyoruz
+  const isStar =
+    iconSrc.toLowerCase().includes("yildiz") ||
+    iconSrc.toLowerCase().includes("star") ||
+    labelPrefix.toLowerCase().includes("alım") ||
+    labelPrefix.toLowerCase().includes("yıldız");
+
   return (
     <div className="flex items-center gap-1">
       {[1, 2, 3, 4, 5].map((i) => {
         const active = i <= value;
         const icon = broken ? (
           <span
-            className={`text-lg leading-none inline-block transition-opacity ${
-              active ? "opacity-100" : "opacity-30 grayscale"
+            className={`text-lg leading-none inline-block transition-all ${
+              active
+                ? `opacity-100 ${
+                    isStar ? "drop-shadow-[0_0_6px_rgba(250,204,21,0.9)]" : ""
+                  }`
+                : "opacity-30 grayscale"
             }`}
           >
             {fallbackEmoji}
@@ -39,8 +50,12 @@ export default function TrackerRow({
             src={iconSrc}
             alt=""
             onError={() => setBroken(true)}
-            className={`w-6 h-6 object-contain mix-blend-multiply transition-opacity ${
-              active ? "opacity-100" : "opacity-30 grayscale"
+            className={`w-6 h-6 object-contain mix-blend-multiply transition-all ${
+              active
+                ? `opacity-100 ${
+                    isStar ? "drop-shadow-[0_0_6px_rgba(250,204,21,0.9)]" : ""
+                  }`
+                : "opacity-30 grayscale"
             }`}
           />
         );
