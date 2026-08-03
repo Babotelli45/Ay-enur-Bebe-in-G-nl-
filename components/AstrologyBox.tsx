@@ -16,7 +16,7 @@ export default function AstrologyBox({ weekStart, weekEnd, rotate = "" }: Props)
     <div className={`paper-texture ink-border shadow-page p-4 rounded-2xl ${rotate}`}>
       <div className="flex items-center justify-between border-b border-ink/15 pb-1 mb-2">
         <span className="font-hand text-xl text-blush-deep font-semibold">
-          ♐ Yay · ♒ Kova Yükselen
+          ✨ 🔮 ✨
         </span>
       </div>
       <p className="font-label text-sm text-ink/80 mb-1">{energy.title}</p>
