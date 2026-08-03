@@ -1,7 +1,6 @@
 "use client";
 
-import ScribbleIcon from "./ScribbleIcon";
-import { CUP_PATH } from "@/lib/iconShapes";
+import TrackerRow from "./TrackerRow";
 
 interface Props {
   value: number; // 0-5
@@ -10,17 +9,12 @@ interface Props {
 
 export default function WaterTracker({ value, onChange }: Props) {
   return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <ScribbleIcon
-          key={i}
-          path={CUP_PATH}
-          filled={i <= value}
-          color="#7EC8E3"
-          onClick={() => onChange(i === value ? i - 1 : i)}
-          label={`su bardağı ${i}`}
-        />
-      ))}
-    </div>
+    <TrackerRow
+      value={value}
+      onChange={onChange}
+      iconSrc="/icons/su.png"
+      fallbackEmoji="💧"
+      labelPrefix="su bardağı"
+    />
   );
 }
