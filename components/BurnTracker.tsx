@@ -12,7 +12,7 @@ export default function BurnTracker({ value, onChange }: Props) {
     <TrackerRow
       value={value}
       onChange={onChange}
-      iconSrc="/icons/ates.png"
+      iconSrc="/icons/yakım.png"
       fallbackEmoji="🔥"
       labelPrefix="kalori yakım ateşi"
       captions={{ 1: "1200 kcal", 5: "2000 kcal" }}
