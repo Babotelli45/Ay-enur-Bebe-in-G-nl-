@@ -3,6 +3,7 @@ export type ActivityCategoryId =
   | "yemek"
   | "kahve"
   | "etkinlik"
+  | "ev"
   | "pembe";
 
 export interface ActivityCategory {
@@ -44,15 +45,23 @@ export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
     label: "Etkinlik",
     emoji: "🎬",
     bg: "from-violet-100 to-indigo-100",
-    options: ["Sinema / Tiyatro", "Arcade", "Bowling"],
+    options: ["Sinema / Tiyatro", "Arcade", "Bowling", "Tatil"],
+    allowCustom: true,
+  },
+  {
+    id: "ev",
+    label: "Ev",
+    emoji: "🏠",
+    bg: "from-rose-100 to-orange-100",
+    options: ["Yatış", "Dizi/Film", "Kitap okuma"],
     allowCustom: true,
   },
   {
     id: "pembe",
-    label: "",
+    label: "Pembe Özel Tuş",
     emoji: "✨",
     bg: "from-pink-200 to-fuchsia-200",
-    options: ["Rastgele Seçim", "farkmaz"],
+    options: ["Rastgele Seçim", "YES KİNG (( farkmaz ))"],
     allowCustom: false,
   },
 ];
@@ -62,12 +71,12 @@ export function weightedRandomActivity(): { main: string; sub: string } {
   const pool: { main: string; sub: string; weight: number }[] = [
     { main: "Kahve", sub: "Casual", weight: 3 },
     { main: "Kahve", sub: "Kokteyl", weight: 2 },
-    { main: "Yürüyüş", sub: "Deniz kenarı", weight: 2 },
-    { main: "Yürüyüş", sub: "Park", weight: 3 },
-    { main: "Yürüyüş", sub: "Orman", weight: 3 },
+    { main: "Yürüyüş", sub: "Deniz kenarı", weight: 3 },
+    { main: "Yürüyüş", sub: "Park", weight: 2 },
+    { main: "Yürüyüş", sub: "Orman", weight: 2 },
     { main: "Yemek", sub: "Sushi", weight: 1 },
     { main: "Yemek", sub: "Tatlı", weight: 1 },
-    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 2 },
+    { main: "Etkinlik", sub: "Sinema / Tiyatro", weight: 1 },
   ];
   const total = pool.reduce((s, p) => s + p.weight, 0);
   let r = Math.random() * total;
