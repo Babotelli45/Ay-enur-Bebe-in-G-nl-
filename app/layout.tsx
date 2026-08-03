@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Patrick_Hand, Kalam } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const caveat = Caveat({
@@ -49,6 +50,7 @@ export default function RootLayout({
         className={`${caveat.variable} ${patrickHand.variable} ${kalam.variable} font-body`}
       >
         {children}
+        <Analytics />
         <script
           dangerouslySetInnerHTML={{
             __html: `
