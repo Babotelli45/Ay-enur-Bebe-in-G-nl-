@@ -12,7 +12,7 @@ export default function CalorieIntakeTracker({ value, onChange }: Props) {
     <TrackerRow
       value={value}
       onChange={onChange}
-      iconSrc="/icons/yildiz.png"
+      iconSrc="/icons/alım.png"
       fallbackEmoji="⭐"
       labelPrefix="kalori alım yıldızı"
     />
