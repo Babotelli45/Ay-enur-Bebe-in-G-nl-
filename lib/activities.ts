@@ -15,7 +15,7 @@ export interface ActivityCategory {
   options: string[];
   allowCustom: boolean;
 }
-}
+
 
 export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
   {
