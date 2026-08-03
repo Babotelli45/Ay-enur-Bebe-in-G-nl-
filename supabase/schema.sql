@@ -10,6 +10,7 @@ create table if not exists public.daily_entries (
   water_count smallint not null default 0 check (water_count between 0 and 5),
   kcal_intake_count smallint not null default 0 check (kcal_intake_count between 0 and 5),
   kcal_burn_count smallint not null default 0 check (kcal_burn_count between 0 and 5),
+  reading_count smallint not null default 0 check (reading_count between 0 and 5),
   mood text check (mood in ('iyi', 'kotu', 'huysuz', 'yorgun', 'hasta') or mood is null),
   location text,
   comment text,

@@ -4,6 +4,7 @@ export interface DailyEntry {
   water_count: number;
   kcal_intake_count: number;
   kcal_burn_count: number;
+  reading_count: number;
   mood: string | null;
   location: string | null;
   comment: string | null;

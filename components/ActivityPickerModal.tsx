@@ -74,9 +74,9 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                 <button
                   key={cat.id}
                   onClick={() => pickCategory(cat)}
-              className={`bg-gradient-to-br ${cat.bg} rounded-xl p-4 flex flex-col items-center gap-1 border border-ink/10 hover:scale-105 transition-transform ${
-  cat.id === "pembe" ? "animate-sparkle" : ""
-}`}
+                  className={`bg-gradient-to-br ${cat.bg} rounded-xl p-4 flex flex-col items-center gap-1 border border-ink/10 hover:scale-105 transition-transform ${
+                    cat.id === "pembe" ? "col-span-2 animate-sparkle" : ""
+                  }`}
                 >
                   <span className="text-2xl">{cat.emoji}</span>
                   <span className="font-label text-sm text-ink">{cat.label}</span>
@@ -112,6 +112,12 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                   <input
                     value={customText}
                     onChange={(e) => setCustomText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        pickCustom();
+                      }
+                    }}
                     placeholder="kendi yazın..."
                     className="flex-1 rounded-lg px-3 py-2 bg-white/70 border border-ink/10 font-label text-sm outline-none"
                   />

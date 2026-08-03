@@ -5,11 +5,11 @@ import { formatDayLabel, toISODate } from "@/lib/dateUtils";
 import WaterTracker from "./WaterTracker";
 import CalorieIntakeTracker from "./CalorieIntakeTracker";
 import BurnTracker from "./BurnTracker";
+import ReadingTracker from "./ReadingTracker";
 import MoodTracker, { MoodId } from "./MoodTracker";
 import PhotoFrame from "./PhotoFrame";
 import ActivityPickerModal from "./ActivityPickerModal";
 import type { DailyEntry } from "@/lib/types";
-import ReadingTracker from "./ReadingTracker";
 
 interface Props {
   date: Date;
@@ -36,23 +36,36 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
       </div>
 
       {/* 1. Hızlı Etkinlik Seçici */}
-      <button
-        type="button"
-        onClick={() => setModalOpen(true)}
-        className="w-full text-left rounded-lg bg-white/50 hover:bg-white/80 px-2 py-1.5 font-label text-sm text-ink border border-ink/10 truncate transition-colors"
-      >
-        {entry?.activity_label ? (
-          <span className="text-blush-deep">✎ {entry.activity_label}</span>
-        ) : (
-          <span className="text-ink/40">+ bugünü seç...</span>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setModalOpen(true)}
+          className={`w-full text-left rounded-lg bg-white/50 hover:bg-white/80 px-2 py-1.5 font-label text-sm text-ink border border-ink/10 truncate transition-colors ${
+            entry?.activity_label ? "pr-7" : ""
+          }`}
+        >
+          {entry?.activity_label ? (
+            <span className="text-blush-deep">✎ {entry.activity_label}</span>
+          ) : (
+            <span className="text-ink/40">+ bugünü seç...</span>
+          )}
+        </button>
+        {entry?.activity_label && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onUpdate({ activity_label: null });
+            }}
+            aria-label="etkinliği sil"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-ink/40 hover:text-ink hover:bg-white/80 text-xs transition-colors"
+          >
+            ✕
+          </button>
         )}
-      </button>
+      </div>
 
       {/* Trackerlar */}
-      <ReadingTracker
-        value={(entry as any)?.reading_count ?? 0}
-        onChange={(v) => onUpdate({ reading_count: v } as any)}
-      />
       <WaterTracker
         value={entry?.water_count ?? 0}
         onChange={(v) => onUpdate({ water_count: v })}
@@ -65,31 +78,39 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         value={entry?.kcal_burn_count ?? 0}
         onChange={(v) => onUpdate({ kcal_burn_count: v })}
       />
+      <ReadingTracker
+        value={entry?.reading_count ?? 0}
+        onChange={(v) => onUpdate({ reading_count: v })}
+      />
       <MoodTracker
         value={(entry?.mood as MoodId) ?? null}
         onChange={(v) => onUpdate({ mood: v })}
       />
 
       {/* Detaylar */}
-<input
-  value={entry?.location ?? ""}
-  onChange={(e) => onUpdate({ location: e.target.value } as any)}
-  placeholder="Yer: ..."
-  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
-/>
-<input
-  value={entry?.comment ?? ""}
-  onChange={(e) => onUpdate({ comment: e.target.value } as any)}
-  placeholder="Yorum / Değerlendirme..."
-  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
-/>
-<textarea
-  value={entry?.notes ?? ""}
-  onChange={(e) => onUpdate({ notes: e.target.value } as any)}
-  placeholder="Serbest not..."
-  rows={2}
-  className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
-/>
+      <input
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        onBlur={() => onUpdate({ location })}
+        placeholder="Yer: ..."
+        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
+      />
+      <input
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        onBlur={() => onUpdate({ comment })}
+        placeholder="Yorum / Değerlendirme..."
+        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
+      />
+      <textarea
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        onBlur={() => onUpdate({ notes })}
+        placeholder="Serbest not..."
+        rows={2}
+        className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
+      />
+
       {/* Fotoğraflar */}
       <div className="grid grid-cols-2 gap-2 mt-1">
         <PhotoFrame

@@ -1,8 +1,5 @@
 "use client";
 
-import ScribbleIcon from "./ScribbleIcon";
-import { STAR_PATH } from "@/lib/iconShapes";
-
 interface Props {
   value: number; // 0-5
   onChange: (v: number) => void;
@@ -11,17 +8,24 @@ interface Props {
 export default function CalorieIntakeTracker({ value, onChange }: Props) {
   return (
     <div className="flex items-center gap-1">
-      <span className="text-xs font-label text-ink/70 mr-1">⭐ Alım</span>
       {[1, 2, 3, 4, 5].map((i) => (
-        <ScribbleIcon
+        <button
           key={i}
-          path={STAR_PATH}
-          filled={i <= value}
-          color="#F0C63A"
-          glow
+          type="button"
           onClick={() => onChange(i === value ? i - 1 : i)}
-          label={`kalori alım yıldızı ${i}`}
-        />
+          aria-label={`kalori alım yıldızı ${i}`}
+          aria-pressed={i <= value}
+          className="transition-transform hover:scale-110 active:scale-95"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/yildiz.png"
+            alt=""
+            className={`w-6 h-6 object-contain mix-blend-multiply transition-opacity ${
+              i <= value ? "opacity-100" : "opacity-30"
+            }`}
+          />
+        </button>
       ))}
     </div>
   );

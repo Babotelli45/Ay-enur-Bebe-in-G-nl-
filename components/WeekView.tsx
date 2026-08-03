@@ -21,6 +21,7 @@ import BackgroundDecor from "./BackgroundDecor";
 import DateNav from "./DateNav";
 import DayCard from "./DayCard";
 import WeeklyNotesBox from "./WeeklyNotesBox";
+import AstrologyBox from "./AstrologyBox";
 
 const ROTATIONS = [
   "-rotate-1",
@@ -40,6 +41,7 @@ function emptyEntry(iso: string): DailyEntry {
     water_count: 0,
     kcal_intake_count: 0,
     kcal_burn_count: 0,
+    reading_count: 0,
     mood: null,
     location: null,
     comment: null,
@@ -238,11 +240,16 @@ export default function WeekView() {
             </div>
           </div>
 
-          <div className="mt-4 text-center md:text-left md:pl-4">
-            <p className="font-hand text-lg text-ink/60 italic">
-              “{quote.text}”{" "}
-              <span className="not-italic text-sm text-ink/40">— {quote.author}</span>
-            </p>
+          <div className="mt-4 flex flex-col md:flex-row gap-3 items-start">
+            <div className="flex-1 text-center md:text-left md:pl-4">
+              <p className="font-hand text-lg text-ink/60 italic">
+                “{quote.text}”{" "}
+                <span className="not-italic text-sm text-ink/40">— {quote.author}</span>
+              </p>
+            </div>
+            <div className="w-full md:w-72">
+              <AstrologyBox weekStart={monday} weekEnd={weekDates[6]} rotate="rotate-[0.4deg]" />
+            </div>
           </div>
         </div>
       </div>

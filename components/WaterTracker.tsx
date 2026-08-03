@@ -11,7 +11,6 @@ interface Props {
 export default function WaterTracker({ value, onChange }: Props) {
   return (
     <div className="flex items-center gap-1">
-      <span className="text-xs font-label text-ink/70 mr-1">💧 Su</span>
       {[1, 2, 3, 4, 5].map((i) => (
         <ScribbleIcon
           key={i}
