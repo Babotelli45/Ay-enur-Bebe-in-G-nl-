@@ -64,11 +64,11 @@ export const ACTIVITY_CATEGORIES: ActivityCategory[] = [
   },
   {
     id: "pembe",
-    label: "Pembe Özel Tuş",
+    label: "",
     emoji: "✨",
     icon: "/icons/pembe.png",
     bg: "from-pink-200 to-fuchsia-200",
-    options: ["Rastgele Seçim", "YES KİNG (( farkmaz ))"],
+    options: ["Rastgele Seçim", "farkmaz"],
     allowCustom: false,
   },
 ];
