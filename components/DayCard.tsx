@@ -106,7 +106,7 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         onKeyDown={(e) => {
           if (e.key === "Enter") e.currentTarget.blur();
         }}
-        placeholder="Yorum / Değerlendirme..."
+        placeholder="Yorum/Değerlendirme..."
         enterKeyHint="done"
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
       />
@@ -114,7 +114,7 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         onBlur={() => onUpdate({ notes })}
-        placeholder="Serbest not..."
+        placeholder="not..."
         rows={2}
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
       />
