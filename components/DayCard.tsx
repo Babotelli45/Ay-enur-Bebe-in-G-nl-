@@ -66,6 +66,10 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
       </div>
 
       {/* Trackerlar */}
+      <ReadingTracker
+        value={entry?.reading_count ?? 0}
+        onChange={(v) => onUpdate({ reading_count: v })}
+      />
       <WaterTracker
         value={entry?.water_count ?? 0}
         onChange={(v) => onUpdate({ water_count: v })}
@@ -78,10 +82,6 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         value={entry?.kcal_burn_count ?? 0}
         onChange={(v) => onUpdate({ kcal_burn_count: v })}
       />
-      <ReadingTracker
-        value={entry?.reading_count ?? 0}
-        onChange={(v) => onUpdate({ reading_count: v })}
-      />
       <MoodTracker
         value={(entry?.mood as MoodId) ?? null}
         onChange={(v) => onUpdate({ mood: v })}
@@ -92,14 +92,22 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         value={location}
         onChange={(e) => setLocation(e.target.value)}
         onBlur={() => onUpdate({ location })}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.currentTarget.blur();
+        }}
         placeholder="Yer: ..."
+        enterKeyHint="done"
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
       />
       <input
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         onBlur={() => onUpdate({ comment })}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.currentTarget.blur();
+        }}
         placeholder="Yorum / Değerlendirme..."
+        enterKeyHint="done"
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
       />
       <textarea
