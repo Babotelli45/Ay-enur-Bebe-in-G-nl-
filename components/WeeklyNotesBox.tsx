@@ -25,7 +25,7 @@ export default function WeeklyNotesBox({
     >
       <div className="flex items-center justify-between border-b border-ink/15 pb-1">
         <span className="font-hand text-2xl text-blush-deep font-semibold">
-          Haftalık Notlar 🕊️
+          Haftalık Notlar 
         </span>
       </div>
       <textarea
