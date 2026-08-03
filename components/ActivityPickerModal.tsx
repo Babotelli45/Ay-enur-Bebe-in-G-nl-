@@ -78,7 +78,11 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                     cat.id === "pembe" ? "col-span-2 animate-sparkle" : ""
                   }`}
                 >
-                  <span className="text-2xl">{cat.emoji}</span>
+                  {cat.icon ? (
+  <img src={cat.icon} alt={cat.label} className="w-10 h-10 object-contain" />
+) : (
+  <span className="text-2xl">{cat.emoji}</span>
+)}
                   <span className="font-label text-sm text-ink">{cat.label}</span>
                 </button>
               ))}
