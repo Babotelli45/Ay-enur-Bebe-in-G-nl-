@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ACTIVITY_CATEGORIES,
   ActivityCategory,
@@ -16,10 +17,12 @@ type Step = 1 | 2 | 3;
 
 function CategoryIcon({
   cat,
-  className = "w-10 h-10",
+  className = "w-12 h-12",
+  emojiClassName = "text-3xl",
 }: {
   cat: ActivityCategory;
   className?: string;
+  emojiClassName?: string;
 }) {
   const [broken, setBroken] = useState(false);
   if (cat.icon && !broken) {
@@ -33,7 +36,7 @@ function CategoryIcon({
       />
     );
   }
-  return <span className="text-2xl">{cat.emoji}</span>;
+  return <span className={emojiClassName}>{cat.emoji}</span>;
 }
 
 export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
@@ -41,6 +44,12 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
   const [category, setCategory] = useState<ActivityCategory | null>(null);
   const [pendingLabel, setPendingLabel] = useState<string>("");
   const [customText, setCustomText] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  // Portal, sadece client'ta (document mevcutken) kullanılabilir
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   function pickCategory(cat: ActivityCategory) {
     setCategory(cat);
@@ -68,20 +77,20 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
     onClose();
   }
 
-  return (
+  const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="paper-texture ink-border shadow-page w-full max-w-sm rounded-2xl p-5 relative"
+        className="w-full max-w-sm bg-[#fffdfa] dark:bg-paper rounded-3xl p-6 shadow-2xl relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 text-ink/50 hover:text-ink text-lg"
           aria-label="kapat"
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-ink/5 hover:bg-ink/15 text-ink/60 hover:text-ink text-lg transition-colors"
         >
           ✕
         </button>
@@ -99,7 +108,7 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                   onClick={() => pickCategory(cat)}
                   className={`aspect-square bg-gradient-to-br ${cat.bg} rounded-xl p-3 flex flex-col items-center justify-center gap-1 border border-ink/10 hover:scale-105 transition-transform`}
                 >
-                  <CategoryIcon cat={cat} className="w-10 h-10" />
+                  <CategoryIcon cat={cat} className="w-12 h-12" emojiClassName="text-3xl" />
                   <span className="font-label text-sm text-ink text-center leading-tight">
                     {cat.label}
                   </span>
@@ -118,7 +127,7 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
               ← geri
             </button>
             <h3 className="font-hand text-2xl text-ink mb-4 text-center flex items-center justify-center gap-2">
-              <CategoryIcon cat={category} className="w-7 h-7" />
+              <CategoryIcon cat={category} className="w-8 h-8" emojiClassName="text-2xl" />
               {category.label}
             </h3>
             <div className="flex flex-col gap-2">
@@ -126,7 +135,7 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                 <button
                   key={opt}
                   onClick={() => pickSub(opt)}
-                  className="bg-white/70 hover:bg-white rounded-lg py-2 px-3 text-left font-label text-ink border border-ink/10 flex items-center gap-2"
+                  className="bg-white/70 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 rounded-lg py-2 px-3 text-left font-label text-ink border border-ink/10 flex items-center gap-2"
                 >
                   {opt === "Rastgele Seçim" ? (
                     <>
@@ -152,7 +161,7 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
                     placeholder="kendi yazın..."
                     inputMode="text"
                     enterKeyHint="done"
-                    className="flex-1 rounded-lg px-3 py-2 bg-white/70 border border-ink/10 font-label text-sm outline-none"
+                    className="flex-1 rounded-lg px-3 py-2 bg-white/70 dark:bg-white/5 border border-ink/10 font-label text-sm text-ink outline-none"
                   />
                   <button
                     onClick={pickCustom}
@@ -194,4 +203,9 @@ export default function ActivityPickerModal({ onClose, onConfirm }: Props) {
       </div>
     </div>
   );
+
+  // Modal, rotate-1 gibi transform içeren üst bileşenlerin "containing block"
+  // sorunundan tamamen kaçınmak için doğrudan document.body'e portallanır.
+  if (!mounted) return null;
+  return createPortal(modalContent, document.body);
 }
