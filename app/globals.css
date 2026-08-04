@@ -7,20 +7,38 @@ body {
   height: 100%;
 }
 
+:root {
+  --color-paper-rgb: 246 238 218; /* #F6EEDA */
+  --color-ink-rgb: 91 70 54; /* #5B4636 */
+  --color-body-1: #f9dce8;
+  --color-body-2: #f0c9d8;
+  --color-body-3: #dba9c3;
+}
+
+.dark {
+  --color-paper-rgb: 42 36 56; /* #2a2438 */
+  --color-ink-rgb: 233 213 255; /* #e9d5ff */
+  --color-body-1: #1e1b2e;
+  --color-body-2: #241f38;
+  --color-body-3: #171325;
+}
+
 body {
-  background: radial-gradient(circle at 20% 10%, #f9dce8 0%, #f0c9d8 35%, #dba9c3 100%);
+  background: radial-gradient(circle at 20% 10%, var(--color-body-1) 0%, var(--color-body-2) 35%, var(--color-body-3) 100%);
   overflow-x: hidden;
+  transition: background 0.4s ease;
 }
 
 /* Aged, dotted bullet-journal paper texture */
 .paper-texture {
-  background-color: #f6eeda;
+  background-color: rgb(var(--color-paper-rgb));
   background-image:
-    radial-gradient(rgba(91, 70, 54, 0.16) 1px, transparent 1px),
+    radial-gradient(rgb(var(--color-ink-rgb) / 0.16) 1px, transparent 1px),
     radial-gradient(rgba(205, 163, 91, 0.08) 60px, transparent 61px);
   background-size: 22px 22px, 220px 220px;
   background-position: 0 0, 40px 60px;
   position: relative;
+  transition: background-color 0.4s ease;
 }
 
 .paper-texture::before {
@@ -28,9 +46,15 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.5), transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(160, 120, 80, 0.12), transparent 60%);
+    radial-gradient(ellipse at top left, rgb(255 255 255 / 0.5), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgb(160 120 80 / 0.12), transparent 60%);
   pointer-events: none;
+}
+
+.dark .paper-texture::before {
+  background:
+    radial-gradient(ellipse at top left, rgb(255 255 255 / 0.06), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgb(0 0 0 / 0.3), transparent 60%);
 }
 
 /* deckled / torn paper edge illusion */
@@ -45,7 +69,7 @@ body {
 }
 
 .ink-border {
-  border: 2px solid rgba(91, 70, 54, 0.35);
+  border: 2px solid rgb(var(--color-ink-rgb) / 0.35);
   border-radius: 16px;
 }
 
@@ -54,7 +78,7 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(91, 70, 54, 0.3);
+  background: rgb(var(--color-ink-rgb) / 0.3);
   border-radius: 8px;
 }
 
