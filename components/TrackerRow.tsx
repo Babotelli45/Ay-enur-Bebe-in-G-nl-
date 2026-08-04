@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import SparkleBurst from "./SparkleBurst";
 
 interface Props {
   value: number; // 0-5
@@ -20,60 +21,29 @@ export default function TrackerRow({
   captions,
 }: Props) {
   const [broken, setBroken] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
+  const prevValueRef = useRef(value);
 
-  // Her ikonun kendi rengine uygun ve eşit yoğunlukta parlama sınıfı
-  const getGlowClass = () => {
-    const src = iconSrc.toLowerCase();
-    const label = labelPrefix.toLowerCase();
-
-    if (
-      src.includes("okuma") ||
-      src.includes("kitap") ||
-      label.includes("okuma") ||
-      label.includes("kitap")
-    ) {
-      return "drop-shadow-[0_0_4px_rgba(168,85,247,0.65)]"; // Mor (Kitap)
+  // 5/5'e yeni ulaşıldığında kısa bir pırıltı patlaması tetikle
+  useEffect(() => {
+    if (value === 5 && prevValueRef.current !== 5) {
+      setCelebrate(true);
+      const t = setTimeout(() => setCelebrate(false), 900);
+      prevValueRef.current = value;
+      return () => clearTimeout(t);
     }
-    if (
-      src.includes("su") ||
-      src.includes("water") ||
-      label.includes("su")
-    ) {
-      return "drop-shadow-[0_0_4px_rgba(56,189,248,0.65)]"; // Mavi (Su)
-    }
-    if (
-      src.includes("yildiz") ||
-      src.includes("alim") ||
-      src.includes("food") ||
-      src.includes("kalori") ||
-      label.includes("alım") ||
-      label.includes("alim")
-    ) {
-      return "drop-shadow-[0_0_3.5px_rgba(250,204,21,0.5)]"; // Hafifletilmiş Sarı (Alım)
-    }
-    if (
-      src.includes("ates") ||
-      src.includes("yakim") ||
-      src.includes("burn") ||
-      label.includes("yakım") ||
-      label.includes("yakim")
-    ) {
-      return "drop-shadow-[0_0_4px_rgba(248,113,113,0.65)]"; // Kırmızı/Turuncu (Yakım)
-    }
-
-    return "drop-shadow-[0_0_3.5px_rgba(250,204,21,0.4)]";
-  };
-
-  const glowClass = getGlowClass();
+    prevValueRef.current = value;
+  }, [value]);
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="relative flex items-center gap-1">
+      {celebrate && <SparkleBurst spread={26} />}
       {[1, 2, 3, 4, 5].map((i) => {
         const active = i <= value;
         const icon = broken ? (
           <span
-            className={`text-lg leading-none inline-block transition-all ${
-              active ? `opacity-100 ${glowClass}` : "opacity-30 grayscale"
+            className={`text-lg leading-none inline-block transition-opacity ${
+              active ? "opacity-100" : "opacity-30 grayscale"
             }`}
           >
             {fallbackEmoji}
@@ -84,8 +54,8 @@ export default function TrackerRow({
             src={iconSrc}
             alt=""
             onError={() => setBroken(true)}
-            className={`w-6 h-6 object-contain mix-blend-multiply transition-all ${
-              active ? `opacity-100 ${glowClass}` : "opacity-30 grayscale"
+            className={`w-6 h-6 object-contain mix-blend-multiply transition-opacity ${
+              active ? "opacity-100" : "opacity-30 grayscale"
             }`}
           />
         );
