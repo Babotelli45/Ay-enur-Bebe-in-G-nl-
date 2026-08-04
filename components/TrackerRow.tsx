@@ -43,7 +43,7 @@ export default function TrackerRow({
         const icon = broken ? (
           <span
             className={`text-lg leading-none inline-block transition-opacity ${
-              active ? "opacity-100" : "opacity-30 grayscale"
+              active ? "opacity-100 dark:opacity-90" : "opacity-30 dark:opacity-40 grayscale"
             }`}
           >
             {fallbackEmoji}
@@ -54,8 +54,8 @@ export default function TrackerRow({
             src={iconSrc}
             alt=""
             onError={() => setBroken(true)}
-            className={`w-6 h-6 object-contain mix-blend-multiply transition-opacity ${
-              active ? "opacity-100" : "opacity-30 grayscale"
+            className={`w-6 h-6 object-contain mix-blend-multiply dark:mix-blend-normal transition-opacity ${
+              active ? "opacity-100 dark:opacity-85" : "opacity-30 dark:opacity-35 grayscale"
             }`}
           />
         );
@@ -80,7 +80,7 @@ export default function TrackerRow({
           <div key={i} className="flex flex-col items-center">
             {button}
             <span
-              className={`text-[8px] leading-none font-label text-ink/40 mt-0.5 whitespace-nowrap ${
+              className={`text-[8px] leading-none font-label text-ink/40 dark:text-white/50 mt-0.5 whitespace-nowrap ${
                 captions[i] ? "" : "invisible"
               }`}
             >
