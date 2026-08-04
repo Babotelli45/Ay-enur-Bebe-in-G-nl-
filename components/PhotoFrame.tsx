@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { supabase, PHOTOS_BUCKET } from "@/lib/supabaseClient";
+import SparkleBurst from "./SparkleBurst";
 
 interface Props {
   url: string | null;
@@ -13,6 +14,7 @@ export default function PhotoFrame({ url, pathPrefix, onChange }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [justUploaded, setJustUploaded] = useState(false);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -28,6 +30,9 @@ export default function PhotoFrame({ url, pathPrefix, onChange }: Props) {
       if (uploadError) throw uploadError;
       const { data } = supabase.storage.from(PHOTOS_BUCKET).getPublicUrl(filePath);
       onChange(data.publicUrl);
+      // Fotoğraf çekilmiş gibi tatlı bir flaş + pırıltı efekti
+      setJustUploaded(true);
+      setTimeout(() => setJustUploaded(false), 900);
     } catch (err) {
       setError("Yükleme başarısız oldu, tekrar deneyin.");
       // eslint-disable-next-line no-console
@@ -40,7 +45,7 @@ export default function PhotoFrame({ url, pathPrefix, onChange }: Props) {
 
   return (
     <div
-      className="relative w-full aspect-square rounded-xl border-2 border-dashed border-ink/40 bg-white/40 flex items-center justify-center overflow-hidden cursor-pointer group"
+      className="relative w-full aspect-square rounded-xl border-2 border-dashed border-ink/40 bg-white/40 dark:bg-white/5 flex items-center justify-center overflow-hidden cursor-pointer group"
       onClick={() => inputRef.current?.click()}
     >
       <input
@@ -76,6 +81,12 @@ export default function PhotoFrame({ url, pathPrefix, onChange }: Props) {
         <span className="absolute bottom-0 inset-x-0 text-[10px] text-red-600 bg-white/80 text-center">
           {error}
         </span>
+      )}
+      {justUploaded && (
+        <>
+          <div className="absolute inset-0 bg-white animate-flash pointer-events-none" />
+          <SparkleBurst spread={34} />
+        </>
       )}
     </div>
   );
