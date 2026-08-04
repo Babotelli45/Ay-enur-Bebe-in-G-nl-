@@ -25,13 +25,29 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
   const [notes, setNotes] = useState(entry?.notes ?? "");
   const isoDate = toISODate(date);
 
+  const isComplete =
+    (entry?.reading_count ?? 0) >= 1 &&
+    (entry?.water_count ?? 0) >= 1 &&
+    (entry?.kcal_intake_count ?? 0) >= 1 &&
+    (entry?.kcal_burn_count ?? 0) >= 1 &&
+    Boolean(entry?.photo_url_1 || entry?.photo_url_2);
+
   return (
     <div
       className={`paper-texture ink-border shadow-page relative flex flex-col gap-2 p-3 rounded-2xl ${rotate}`}
     >
       <div className="flex items-center justify-between border-b border-ink/15 pb-1">
-        <span className="font-hand text-2xl text-blush-deep font-semibold">
+        <span className="font-hand text-2xl text-blush-deep font-semibold flex items-center gap-1.5">
           {formatDayLabel(date)}
+          {isComplete && (
+            <span
+              className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blush-deep text-white text-xs animate-pop"
+              title="Gün tamamlandı!"
+              aria-label="gün tamamlandı"
+            >
+              ✓
+            </span>
+          )}
         </span>
       </div>
 
@@ -106,7 +122,7 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         onKeyDown={(e) => {
           if (e.key === "Enter") e.currentTarget.blur();
         }}
-        placeholder="Yorum/Değerlendirme..."
+        placeholder="Yorum / Değerlendirme..."
         enterKeyHint="done"
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none py-0.5"
       />
@@ -114,7 +130,7 @@ export default function DayCard({ date, entry, onUpdate, rotate }: Props) {
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         onBlur={() => onUpdate({ notes })}
-        placeholder="not..."
+        placeholder="Serbest not..."
         rows={2}
         className="bg-transparent border-b border-ink/20 font-label text-sm text-ink placeholder:text-ink/30 outline-none resize-none py-0.5"
       />
